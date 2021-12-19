@@ -1,0 +1,35 @@
+import {Command, UObject, Vector} from "./common";
+
+export interface IMovable {
+  Position: Vector
+  Velocity: Vector
+}
+
+export class MovableAdapter implements IMovable
+{
+  obj: UObject;
+  constructor(obj: UObject) {
+    this.obj = obj;
+  }
+  get Position(): Vector {
+    return this.obj["Position"] as Vector;
+  }
+  set Position(value: Vector) {
+    this.obj["Position"] = value;
+  }
+  get Velocity(): Vector {
+    return this.obj["Velocity"] as Vector;
+  }
+}
+
+export class MoveCommand implements Command {
+  private movable: IMovable;
+  constructor(movable: IMovable) {
+    this.movable = movable;
+  }
+  public execute(): void {
+    for (let i = 0; i < this.movable.Position.body.length; i++) {
+      this.movable.Position.body[i] += this.movable.Velocity.body[i]
+    }
+  }
+}
