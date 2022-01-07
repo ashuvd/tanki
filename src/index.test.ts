@@ -1,4 +1,6 @@
 import {solve, sum} from "./index";
+import {Vector} from "./components/common";
+import {MovableAdapter, MoveCommand} from "./components/move";
 
 test('adds 1 + 2 to equal 3', () => {
   expect(sum(1, 2)).toBe(3);
@@ -36,3 +38,46 @@ test('parameters typeof number (not Infinity)', () => {
   // @ts-ignore
   expect(() => solve(Infinity, 1, 1)).toThrow('Параметры должны иметь тип "number"');
 });
+
+
+
+test('Position [12, 5] -> Position [5, 8] with Velocity [-7, 3]', () => {
+  const MockObject = {
+    Position: new Vector([12, 5]),
+    Velocity: new Vector([-7, 3]),
+  }
+  const move = new MoveCommand(new MovableAdapter(MockObject));
+  move.execute();
+  expect(MockObject.Position.body).toStrictEqual([5, 8]);
+});
+test('no Position -> throw new Error', () => {
+  const MockObject = {
+    Velocity: new Vector([-7, 3]),
+  }
+  const move = new MoveCommand(new MovableAdapter(MockObject));
+  expect(() => move.execute()).toThrow();
+});
+test('no Velocity -> throw new Error', () => {
+  const MockObject = {
+    Position: new Vector([12, 5]),
+  }
+  const move = new MoveCommand(new MovableAdapter(MockObject));
+  expect(() => move.execute()).toThrow();
+});
+test('setPosition (Position < 0) -> throw new Error', () => {
+  const MockObject = {
+    Position: new Vector([-12, 5]),
+    Velocity: new Vector([-7, 3]),
+  }
+  const move = new MoveCommand(new MovableAdapter(MockObject));
+  expect(() => move.execute()).toThrow();
+});
+test('setPosition (Velocity === 0) -> throw new Error', () => {
+  const MockObject = {
+    Position: new Vector([12, 5]),
+    Velocity: new Vector([0, 0]),
+  }
+  const move = new MoveCommand(new MovableAdapter(MockObject));
+  expect(() => move.execute()).toThrow();
+});
+
