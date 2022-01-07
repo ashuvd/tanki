@@ -29,7 +29,10 @@ export class MoveCommand implements Command {
   }
   public execute(): void {
     for (let i = 0; i < this.movable.Position.body.length; i++) {
-      this.movable.Position.body[i] += this.movable.Velocity.body[i]
+      if (this.movable.Position.body[i] < 0) {
+        throw new Error('Не в игровом поле')
+      }
+      this.movable.Position.body[i] += this.movable.Velocity.body[i];
     }
   }
 }
