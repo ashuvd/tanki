@@ -64,10 +64,18 @@ test('no Velocity -> throw new Error', () => {
   const move = new MoveCommand(new MovableAdapter(MockObject));
   expect(() => move.execute()).toThrow();
 });
-test('setPosition -> throw new Error', () => {
+test('setPosition (Position < 0) -> throw new Error', () => {
   const MockObject = {
     Position: new Vector([-12, 5]),
     Velocity: new Vector([-7, 3]),
+  }
+  const move = new MoveCommand(new MovableAdapter(MockObject));
+  expect(() => move.execute()).toThrow();
+});
+test('setPosition (Velocity === 0) -> throw new Error', () => {
+  const MockObject = {
+    Position: new Vector([12, 5]),
+    Velocity: new Vector([0, 0]),
   }
   const move = new MoveCommand(new MovableAdapter(MockObject));
   expect(() => move.execute()).toThrow();

@@ -28,6 +28,9 @@ export class MoveCommand implements Command {
     this.movable = movable;
   }
   public execute(): void {
+    if (this.movable.Velocity.body[0] === 0 && this.movable.Velocity.body[1] === 0) {
+      throw new Error('С нулевой скоростью не сдвинуть объект')
+    }
     for (let i = 0; i < this.movable.Position.body.length; i++) {
       if (this.movable.Position.body[i] < 0) {
         throw new Error('Не в игровом поле')
