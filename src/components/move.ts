@@ -1,3 +1,4 @@
+import { errorHandler } from "../handlers";
 import {Command, UObject, Vector} from "./common";
 
 export interface IMovable {
@@ -28,14 +29,18 @@ export class MoveCommand implements Command {
     this.movable = movable;
   }
   public execute(): void {
-    if (this.movable.Velocity.body[0] === 0 && this.movable.Velocity.body[1] === 0) {
-      throw new Error('С нулевой скоростью не сдвинуть объект')
-    }
-    for (let i = 0; i < this.movable.Position.body.length; i++) {
-      if (this.movable.Position.body[i] < 0) {
-        throw new Error('Не в игровом поле')
+    try {
+      if (this.movable.Velocity.body[0] === 0 && this.movable.Velocity.body[1] === 0) {
+        throw new Error(JSON.stringify({code: 11, message: 'С нулевой скоростью не сдвинуть объект'}));
       }
-      this.movable.Position.body[i] += this.movable.Velocity.body[i];
+      for (let i = 0; i < this.movable.Position.body.length; i++) {
+        if (this.movable.Position.body[i] < 0) {
+          throw new Error(JSON.stringify({code: 12, message: 'Не в игровом поле'}))
+        }
+        this.movable.Position.body[i] += this.movable.Velocity.body[i];
+      }
+    } catch (error) {
+      errorHandler(error);
     }
   }
 }
