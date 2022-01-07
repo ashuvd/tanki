@@ -30,6 +30,14 @@ test('parameters typeof number', () => {
   // @ts-ignore
   expect(() => solve('0', 1, 1)).toThrow('Параметры должны иметь тип "number"');
 });
+test('parameters typeof number (not NaN)', () => {
+  // @ts-ignore
+  expect(() => solve(NaN, 1, 1)).toThrow('Параметры должны иметь тип "number"');
+});
+test('parameters typeof number (not Infinity)', () => {
+  // @ts-ignore
+  expect(() => solve(Infinity, 1, 1)).toThrow('Параметры должны иметь тип "number"');
+});
 
 
 
